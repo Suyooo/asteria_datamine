@@ -11,9 +11,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import be.suyo.toasdatabase.news.NewsPost;
-import be.suyo.toasdatabase.partners.Partner;
 import be.suyo.toasdatabase.partners.PartnerMatch;
-import be.suyo.toasdatabase.partners.PartnerSchedule;
 import be.suyo.toasdatabase.patches.IndexPageFeature;
 import be.suyo.toasdatabase.patches.Patch;
 import be.suyo.toasdatabase.patches.PatchCategory;
@@ -32,11 +30,12 @@ import be.suyo.toasdatabase.units.Unit;
 
 public class DatabaseConnection {
     private static ConnectionSource connectionSource;
+
     static {
         if (!(new File("database.db").exists())) {
             throw new DatabaseException("database.db does not exist");
         }
-        
+
         System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR");
         try {
             connectionSource = new JdbcConnectionSource("jdbc:sqlite:database.db");
@@ -60,9 +59,7 @@ public class DatabaseConnection {
             TableUtils.createTableIfNotExists(connectionSource, Subquest.class);
             TableUtils.createTableIfNotExists(connectionSource, Unit.class);
 
-            TableUtils.createTableIfNotExists(connectionSource, Partner.class);
             TableUtils.createTableIfNotExists(connectionSource, PartnerMatch.class);
-            TableUtils.createTableIfNotExists(connectionSource, PartnerSchedule.class);
 
             TableUtils.createTableIfNotExists(connectionSource, Patch.class);
             TableUtils.createTableIfNotExists(connectionSource, PatchCategory.class);

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import be.suyo.toasdatabase.units.Unit;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -33,9 +34,9 @@ public class PartnerMatch {
         }
     }
 
-    public static Set<Integer> getMatchingUnitIDsForPartner(Partner ptnr) {
+    public static Set<Integer> getMatchingUnitIDsForPartner(Unit ptnr) {
         try {
-            queryByPartnerArg.setValue(ptnr.partUnitId);
+            queryByPartnerArg.setValue(ptnr.unitId);
             Set<Integer> ret = new HashSet<>();
             for (PartnerMatch pm : dao.query(queryByPartnerId)) {
                 ret.add(pm.pmchAwakeningUnitId);

@@ -10,8 +10,9 @@ import be.suyo.toasdatabase.logging.Logger;
 public class TaskManager {
     @SuppressWarnings("rawtypes")
     private static Class[] allTasks =
-            {UpdateCheckTask.class, CheckPendingUnitsTask.class, NewsUpdateWithNotificationsTask.class,
-                    NewsUpdateWithoutNotificationsTask.class, DownloadNewPackagesTask.class};
+            {UpdateCheckTask.class, CheckPendingUnitsTask.class, PartnerScheduleUpdateTask.class,
+                    NewsUpdateWithNotificationsTask.class, NewsUpdateWithoutNotificationsTask.class,
+                    DownloadNewPackagesTask.class};
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
