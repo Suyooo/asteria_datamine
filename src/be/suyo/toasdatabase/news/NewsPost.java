@@ -247,7 +247,7 @@ public class NewsPost {
                     "announce/view?id=" + this.postPageId + "&version=" + Global.getValue("current_version"));
         }
         File contentFile = new File(getLinkUrl() + "_orig");
-        if (!contentFile.getParentFile().mkdirs()) {
+        if (!contentFile.getParentFile().exists() && !contentFile.getParentFile().mkdirs()) {
             throw new RuntimeException("mkdirs failed");
         }
 
@@ -348,7 +348,7 @@ public class NewsPost {
                     css = css.replace(origUrl, url);
                 }
                 File file = new File(cssFuture.getKey().substring(9));
-                if (file.getParentFile().mkdirs()) {
+                if (!file.getParentFile().exists() && file.getParentFile().mkdirs()) {
                     throw new IOException("mkdirs failed");
                 }
                 try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -491,7 +491,7 @@ public class NewsPost {
         }
 
         contentFile = new File(getLinkUrl());
-        if (contentFile.getParentFile().mkdirs()) {
+        if (!contentFile.getParentFile().exists() && contentFile.getParentFile().mkdirs()) {
             throw new RuntimeException("mkdirs failed");
         }
         try (FileOutputStream fos = new FileOutputStream(contentFile)) {

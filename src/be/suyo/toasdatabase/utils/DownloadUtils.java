@@ -116,7 +116,7 @@ public class DownloadUtils {
                 InputStream input = new URL(url).openStream();
                 byte[] bytes = readAllToBytes(input);
                 File file = new File("packages/" + package_id + ".zip");
-                if (!file.getParentFile().mkdirs()) {
+                if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                     throw new IOException("mkdirs failed");
                 }
                 try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -146,8 +146,8 @@ public class DownloadUtils {
                 byte[] bytes = readAllToBytes(input);
                 if (writeToFile) {
                     File file = new File(destFolder + "/" + url);
-                    if (!file.getParentFile().mkdirs()) {
-                        throw new IOException("mkdirs failed");
+                    if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+                        throw new IOException("mkdirs failed: " + file.getParentFile());
                     }
                     try (FileOutputStream fos = new FileOutputStream(file)) {
                         fos.write(bytes);
@@ -178,7 +178,7 @@ public class DownloadUtils {
                 bytes = FileCrypt.decrypt(bytes, url);
                 if (writeToFile) {
                     File file = new File(filename + "/" + url);
-                    if (!file.getParentFile().mkdirs()) {
+                    if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                         throw new IOException("mkdirs failed");
                     }
                     try (FileOutputStream fos = new FileOutputStream(file)) {

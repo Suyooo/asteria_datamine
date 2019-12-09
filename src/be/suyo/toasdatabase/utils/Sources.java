@@ -96,7 +96,7 @@ public class Sources {
             }
 
             File file = new File("templates/filters_source.phtml");
-            if (!file.getParentFile().mkdirs()) {
+            if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                 throw new IOException("mkdirs failed");
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));

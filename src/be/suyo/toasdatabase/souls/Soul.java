@@ -123,7 +123,7 @@ public class Soul {
             File file = new File(
                     "assets/json/soul/" + this.soulId + "-r" + json.getJSONObject("soul").getInt("rarity") + "e" +
                             json.getJSONObject("soul").getInt("element") + ".json");
-            if (!file.getParentFile().mkdirs()) {
+            if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                 throw new RuntimeException("mkdirs failed");
             }
             try (FileOutputStream fos = new FileOutputStream(file)) {

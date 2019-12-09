@@ -137,7 +137,7 @@ public class Characters {
             }
 
             File file = new File("templates/filters_character.phtml");
-            if (!file.getParentFile().mkdirs()) {
+            if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                 throw new IOException("mkdirs failed");
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
