@@ -123,10 +123,10 @@ public class Soul {
             File file = new File(
                     "assets/json/soul/" + this.soulId + "-r" + json.getJSONObject("soul").getInt("rarity") + "e" +
                             json.getJSONObject("soul").getInt("element") + ".json");
+            if (!file.getParentFile().mkdirs()) {
+                throw new RuntimeException("mkdirs failed");
+            }
             try (FileOutputStream fos = new FileOutputStream(file)) {
-                if (!file.getParentFile().mkdirs()) {
-                    throw new IOException("mkdirs failed");
-                }
                 fos.write(json.toString().getBytes());
             } catch (IOException e) {
                 System.err.println("Saving original JSON failed, exception follows. Continuing with database entry.");

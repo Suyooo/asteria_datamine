@@ -50,11 +50,11 @@ public class UnitManager {
         json.remove("user");
 
         File file = new File("assets/json/unit/" + unit_id + ".json");
+        if (file.getParentFile().mkdirs()) {
+            throw new UnitException("mkdirs failed");
+        }
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            if (file.getParentFile().mkdirs()) {
-                throw new IOException("mkdirs failed");
-            }
             fos.write(json.toString().getBytes());
         } catch (IOException e) {
             System.err.println("Saving original JSON failed, exception follows. Continuing with database entry.");

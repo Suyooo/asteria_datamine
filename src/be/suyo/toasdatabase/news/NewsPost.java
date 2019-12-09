@@ -247,11 +247,11 @@ public class NewsPost {
                     "announce/view?id=" + this.postPageId + "&version=" + Global.getValue("current_version"));
         }
         File contentFile = new File(getLinkUrl() + "_orig");
+        if (!contentFile.getParentFile().mkdirs()) {
+            throw new RuntimeException("mkdirs failed");
+        }
 
         try (FileOutputStream fos = new FileOutputStream(contentFile)) {
-            if (!contentFile.getParentFile().mkdirs()) {
-                throw new IOException("mkdirs failed");
-            }
             fos.write(content.getBytes());
         } catch (IOException e) {
             System.err.println("Failed to write original news post content");
@@ -491,10 +491,10 @@ public class NewsPost {
         }
 
         contentFile = new File(getLinkUrl());
+        if (contentFile.getParentFile().mkdirs()) {
+            throw new RuntimeException("mkdirs failed");
+        }
         try (FileOutputStream fos = new FileOutputStream(contentFile)) {
-            if (contentFile.getParentFile().mkdirs()) {
-                throw new IOException("mkdirs failed");
-            }
             fos.write(doc.toString().getBytes());
         } catch (IOException e) {
             System.err.println("Failed to write news post content");
