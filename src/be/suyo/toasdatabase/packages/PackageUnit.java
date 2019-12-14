@@ -1,6 +1,6 @@
 package be.suyo.toasdatabase.packages;
 
-class PackageUnit {
+public class PackageUnit {
     public int unitId;
     public String shortName;
     public boolean isEvolved;

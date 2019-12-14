@@ -4,5 +4,8 @@ bin
 .project
 .settings
 database.db
+packages
+maview
+datamine_*
 run.sh
 src/be/suyo/toasdatabase/utils/Garbagio.java

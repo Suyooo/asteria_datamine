@@ -9,6 +9,7 @@ import java.util.zip.ZipInputStream;
 
 import be.suyo.toasdatabase.utils.Characters;
 import be.suyo.toasdatabase.utils.DownloadException;
+import be.suyo.toastoolkit.ccbi2ccb.CcbiFile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -86,35 +87,6 @@ public class PackageDownloader {
         }
         zip.close();
         return unitList;
-    }
-
-    public static void datamineHelper(int packageId) {
-        try {
-            for (PackageUnit unit : getListOfUnitsInPackage(packageId)) {
-                if (unit.isEvolved) {
-                    continue;
-                }
-                try {
-                    DownloadUtils.downloadAndDecryptFileFromResourceUrl(
-                            "image/character/detail/character_detail_" + unit.shortName + "_" + (unit.unitId / 10) +
-                                    ".png", true, "datamine_" + packageId);
-                    Logger.notify("  New Unit " + Characters.getNameEn(unit.unitId / 10000) + " " + unit.unitId +
-                            " (image downloaded)");
-                } catch (DownloadException e) {
-                    try {
-                        DownloadUtils.downloadAndDecryptFileFromResourceUrl(
-                                "image/soul/detail/detail_soul_" + unit.shortName + "_" + (unit.unitId / 10) + ".png",
-                                true, "datamine_" + packageId);
-                        Logger.notify("  New Soul " + Characters.getNameEn(unit.unitId / 10000) + " " + unit.unitId);
-                    } catch (DownloadException e2) {
-                        Logger.notify("  Thumb of unknown source " + Characters.getNameEn(unit.unitId / 10000) + " " +
-                                unit.unitId);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void createPatchForPackage(int packageId) {

@@ -3,6 +3,7 @@ package be.suyo.toasdatabase.gui;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import be.suyo.toasdatabase.gui.datamine.DatamineWindow;
 import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.BorderLayout;
@@ -82,6 +83,7 @@ public class MainMenuWindow extends BasicWindow {
             getTextGUI().addWindowAndWait(new GlobalValuesWindow());
             setVersionLabel();
         });
+        actions.addItem("8 Datamine Tools", () -> getTextGUI().addWindowAndWait(new DatamineWindow()));
         mainPanel.addComponent(actions, BorderLayout.Location.CENTER);
 
         exit = new Button("Exit", this::close);

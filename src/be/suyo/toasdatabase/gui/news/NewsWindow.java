@@ -27,7 +27,7 @@ public class NewsWindow extends BasicWindow {
     private Button exit;
 
     public NewsWindow() {
-        super("Set Version / Configuration Values");
+        super("Manage News");
         setHints(Arrays.asList(Window.Hint.FULL_SCREEN, Window.Hint.MODAL));
 
         Panel mainPanel = new Panel();
