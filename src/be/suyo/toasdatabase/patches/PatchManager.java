@@ -93,7 +93,7 @@ public class PatchManager {
                         Logger.println("New Unit (ID " + pu.punitUnitId + ") not available yet");
                     } else {
                         System.err.println("New Unit (ID " + pu.punitUnitId + ") failed: ");
-                        System.err.println("    " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             } else if (pu.punitChange == PatchUnit.Change.STATS_CHANGED || pu.punitChange == PatchUnit.Change.BUFFED ||
@@ -128,12 +128,12 @@ public class PatchManager {
                             Logger.println("Evo Unit (ID " + pu.punitUnitId + ") successfully updated");
                         } catch (UnitException e) {
                             System.err.println("Evo Unit (ID " + pu.punitUnitId + ") failed: ");
-                            System.err.println("    " + e.getMessage());
+                            e.printStackTrace();
                         }
                     }
                 } catch (UnitException e) {
                     System.err.println("Evo Base Unit (ID " + baseUnitId + ") failed: ");
-                    System.err.println("    " + e.getMessage());
+                    e.printStackTrace();
                 }
             } else if (pu.punitChange == PatchUnit.Change.BOND_AWAKENING_ADDED) {
                 int baseUnitId = pu.punitUnitId - 10;
@@ -149,12 +149,12 @@ public class PatchManager {
                             Logger.println("BAW Unit (ID " + pu.punitUnitId + ") successfully updated");
                         } catch (UnitException e) {
                             System.err.println("BAW Base Unit (ID " + baseUnitId + ") failed: ");
-                            System.err.println("    " + e.getMessage());
+                            e.printStackTrace();
                         }
                     }
                 } catch (UnitException e) {
                     System.err.println("BAW Unit (ID " + pu.punitUnitId + ") failed: ");
-                    System.err.println("    " + e.getMessage());
+                    e.printStackTrace();
                 }
             } else if (pu.punitChange == PatchUnit.Change.DUAL_MA_ADDED) {
                 try {
@@ -168,7 +168,7 @@ public class PatchManager {
                     }
                 } catch (UnitException e) {
                     System.err.println("Dual MA Unit (ID " + pu.punitUnitId + ") failed: ");
-                    System.err.println("    " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

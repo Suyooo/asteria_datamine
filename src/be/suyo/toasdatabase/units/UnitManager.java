@@ -50,7 +50,7 @@ public class UnitManager {
         json.remove("user");
 
         File file = new File("assets/json/unit/" + unit_id + ".json");
-        if (!file.getParentFile().exists() && file.getParentFile().mkdirs()) {
+        if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
             throw new UnitException("mkdirs failed");
         }
 
