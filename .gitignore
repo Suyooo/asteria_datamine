@@ -1,10 +1,14 @@
 bin
+build
+classes
 *.iml
 .classpath
 .project
 .classpath.xml
 .project.xml
 .settings
+.idea
+assets
 database.db
 database.db-journal
 packages
