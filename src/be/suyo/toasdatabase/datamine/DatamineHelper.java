@@ -3,11 +3,6 @@ package be.suyo.toasdatabase.datamine;
 import be.suyo.toasdatabase.logging.Logger;
 import be.suyo.toasdatabase.packages.PackageDownloader;
 import be.suyo.toasdatabase.packages.PackageUnit;
-import be.suyo.toasdatabase.patches.Patch;
-import be.suyo.toasdatabase.patches.PatchCategory;
-import be.suyo.toasdatabase.patches.PatchManager;
-import be.suyo.toasdatabase.patches.PatchUnit;
-import be.suyo.toasdatabase.units.Unit;
 import be.suyo.toasdatabase.utils.Characters;
 import be.suyo.toasdatabase.utils.DownloadException;
 import be.suyo.toasdatabase.utils.DownloadUtils;
@@ -15,10 +10,6 @@ import be.suyo.toasdatabase.utils.Global;
 import be.suyo.toastoolkit.ccbi2ccb.CcbiFile;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DatamineHelper {
 
