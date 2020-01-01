@@ -42,12 +42,12 @@ public class NewsManager {
         Map<String, String> params = new HashMap<>();
         Set<NewsPost.SubpageRequest> subpages = new HashSet<>();
         Set<Long> downloadedInThisUpdate = new HashSet<>();
+        int newPosts = 0;
         int category = 0;
         while (category < 3) {
             params.put("category", "" + (++category));
             int page = 0;
-            page:
-            while (true) {
+            page: while (true) {
                 params.put("p", "" + (++page));
                 JSONObject news = DownloadUtils.downloadAndDecryptJsonFromUrl("announce/search_announces", params);
                 if (!news.has("list")) {
@@ -63,12 +63,18 @@ public class NewsManager {
                     downloadedInThisUpdate.add(np.postPageId);
                     if (np.isNewPost()) {
                         subpages.addAll(np.downloadAndParseContent());
+                        newPosts++;
                         cb.onNewPost(np);
                     } else if (np.isUpdateOfPreviousPost()) {
                         subpages.addAll(np.downloadAndParseContent());
+                        newPosts++;
                         cb.onUpdatedPost(np);
                     } else {
                         break page;
+                    }
+                    if (newPosts > 50) {
+                        new Error("Emergency canceling news download: over 50 posts").printStackTrace();
+                        System.exit(1);
                     }
                 }
             }
