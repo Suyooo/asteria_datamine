@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import be.suyo.toasdatabase.news.*;
 import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.BorderLayout;
@@ -17,10 +18,6 @@ import com.googlecode.lanterna.input.KeyType;
 
 import be.suyo.toasdatabase.gui.LoggingExecutingDialog;
 import be.suyo.toasdatabase.logging.Logger;
-import be.suyo.toasdatabase.news.DatabaseStoreCallback;
-import be.suyo.toasdatabase.news.NewsManager;
-import be.suyo.toasdatabase.news.NewsPost;
-import be.suyo.toasdatabase.news.NewsUpdateCallback;
 
 public class NewsWindow extends BasicWindow {
     private ActionListBox actions;
@@ -60,16 +57,16 @@ public class NewsWindow extends BasicWindow {
             if (nid != null) {
                 getTextGUI()
                         .addWindowAndWait(new LoggingExecutingDialog("Redownload News Post (No New Version)", () -> {
-                            if (NewsPost.getLatestByPageId(nid.longValue()) == null) {
+                            NewsPost np = NewsPost.getLatestByPageId(nid.longValue());
+                            if (np == null) {
                                 Logger.println("No news post with this ID.");
                                 return;
                             }
                             Logger.println("Downloading...");
                             Set<Long> downloadedSet = new HashSet<>();
                             downloadedSet.add(nid.longValue());
-                            NewsManager.downloadSubpages(
-                                    NewsPost.getLatestByPageId(nid.longValue()).downloadAndParseContent(),
-                                    downloadedSet, new DatabaseStoreCallback());
+                            NewsManager.downloadSubpages(np.downloadAndParseContent(), downloadedSet,
+                                    new DatabaseStoreCallback());
                         }));
             }
         });
@@ -78,12 +75,13 @@ public class NewsWindow extends BasicWindow {
                     TextInputDialog.showNumberDialog(getTextGUI(), "Reparse News Post", "Enter News Post ID", "");
             if (nid != null) {
                 getTextGUI().addWindowAndWait(new LoggingExecutingDialog("Reparse News Post", () -> {
-                    if (NewsPost.getLatestByPageId(nid.longValue()) == null) {
+                    NewsPost np = NewsPost.getLatestByPageId(nid.intValue());
+                    if (np == null) {
                         Logger.println("No news post with this ID.");
                         return;
                     }
                     Logger.println("Parsing...");
-                    NewsPost.getLatestByPageId(nid.intValue()).parseContent();
+                    np.parseContent();
                 }));
             }
         });
@@ -92,6 +90,23 @@ public class NewsWindow extends BasicWindow {
                     Logger.println("Parsing...");
                     NewsManager.reparseAllContentFiles();
                 })));
+        actions.addItem("5 Resend Discord Notification For Single News Post", () -> {
+            BigInteger nid = TextInputDialog
+                    .showNumberDialog(getTextGUI(), "Resend Discord Notification For Single News Post",
+                            "Enter News Post ID", "");
+            if (nid != null) {
+                getTextGUI().addWindowAndWait(
+                        new LoggingExecutingDialog("Resend Discord Notification For Single News Post", () -> {
+                            NewsPost np = NewsPost.getLatestByPageId(nid.longValue());
+                            if (np == null) {
+                                Logger.println("No news post with this ID.");
+                                return;
+                            }
+                            Logger.println("Sending...");
+                            new DiscordWebhookCallback().onNewPost(np);
+                        }));
+            }
+        });
         mainPanel.addComponent(actions, BorderLayout.Location.CENTER);
 
         exit = new Button("Return", this::close);
