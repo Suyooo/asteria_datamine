@@ -7,24 +7,19 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import be.suyo.toasdatabase.gui.globals.GlobalValuesWindow;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
@@ -135,33 +130,37 @@ public class NewsPost {
         this.postCategory = category;
         this.postTitle = newsEntryJson.getString("Title");
         try {
+            Calendar jstTime = Global.getJSTTime();
             this.postDisplayDateFrom = dateFormat.parse(newsEntryJson.getString("DisplayDateFrom"));
+            this.postDisplayDateFrom.setYear(jstTime.get(Calendar.YEAR) - 1900);
             this.postDisplayDateTo = dateFormat.parse(newsEntryJson.getString("DisplayDateTo"));
-            int origDatePart = (int) this.postPageId;
-            while (origDatePart > 999999) {
-                origDatePart /= 10;
+            this.postDisplayDateTo.setYear(jstTime.get(Calendar.YEAR) - 1900);
+
+            // if in the first half of a year, assume that all posts with July to December dates are from last year
+            if (jstTime.get(Calendar.MONTH) <= 5) {
+                if (this.postDisplayDateFrom.getMonth() >= 6) {
+                    this.postDisplayDateFrom.setYear(this.postDisplayDateFrom.getYear() - 1);
+                }
+                if (this.postDisplayDateTo.getMonth() >= 6) {
+                    this.postDisplayDateTo.setYear(this.postDisplayDateTo.getYear() - 1);
+                }
             }
+
             try {
-                this.postOriginallyPostedDate = originalDateFormat.parse("" + origDatePart);
-            } catch (ParseException e) {
-                this.postOriginallyPostedDate = this.postDisplayDateFrom;
-            }
-            // Filter impossible dates parsed from weird page IDs
-            if (this.postOriginallyPostedDate.getYear() < 2014 || this.postOriginallyPostedDate.after(new Date())) {
-                this.postDisplayDateFrom.setYear(new Date().getYear());
-                this.postOriginallyPostedDate = this.postDisplayDateFrom;
-            } else {
-                while (origDatePart > 99) {
+                // attempt to read date the post was written on from the page ID
+                int origDatePart = (int) this.postPageId;
+                while (origDatePart > 999999) {
                     origDatePart /= 10;
                 }
-                this.postDisplayDateFrom.setYear(100 + origDatePart);
-            }
-            if (this.postDisplayDateFrom.getTime() - this.postOriginallyPostedDate.getTime() < -(1000 * 60 * 60 * 24 *
-                    7)) { // one week of buffer time, seems like this is the max amount of time they write posts in advance
-                this.postDisplayDateFrom.setYear(this.postOriginallyPostedDate.getYear() + 1);
-                this.postDisplayDateTo.setYear(this.postOriginallyPostedDate.getYear() + 1);
-            } else {
-                this.postDisplayDateTo.setYear(this.postOriginallyPostedDate.getYear());
+                this.postOriginallyPostedDate = originalDateFormat.parse("" + origDatePart);
+
+                if (this.postOriginallyPostedDate.getYear() < 2014 - 1900 ||
+                        this.postOriginallyPostedDate.getYear() > 2025 - 1900) {
+                    throw new ParseException("" + origDatePart, 0);
+                }
+            } catch (ParseException e) {
+                // attempt failed - use post date
+                this.postOriginallyPostedDate = this.postDisplayDateFrom;
             }
         } catch (ParseException e) {
             System.err.println("Failed to parse date");
@@ -196,12 +195,9 @@ public class NewsPost {
 
     // Action Subpage Constructor
     public NewsPost(NewsPost parent, String transferPageId, String params) {
-        try {
-            this.postImageOrAction = "transfer_page_id=" + URLEncoder.encode(transferPageId, "UTF-8") + "&params=" +
-                    URLEncoder.encode(params, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            // will never happen
-        }
+        this.postImageOrAction =
+                "transfer_page_id=" + URLEncoder.encode(transferPageId, StandardCharsets.UTF_8) + "&params=" +
+                        URLEncoder.encode(params, StandardCharsets.UTF_8);
         this.postPageId = Global.makeActionURLHash(transferPageId, params);
         this.postCategory = 5;
         this.postTitle = parent.postTitle + " (Subpage)";
@@ -419,11 +415,7 @@ public class NewsPost {
                 } else if (a.attr("href")
                         .startsWith("localappli://transfer?transfer_page_id=999002&transfer_page_parameter=")) {
                     // external page links should work
-                    try {
-                        a.attr("href", URLDecoder.decode(a.attr("href").substring(70), "UTF-8"));
-                    } catch (UnsupportedEncodingException e) {
-                        // won't happen
-                    }
+                    a.attr("href", URLDecoder.decode(a.attr("href").substring(70), StandardCharsets.UTF_8));
                     a.attr("target", "_blank");
                 } else {
                     a.removeAttr("href");
@@ -558,7 +550,13 @@ public class NewsPost {
         if (this.previousVersion == null) {
             return true;
         }
-        return this.postDisplayDateFrom.after(this.previousVersion.postDisplayDateFrom);
+        if (!this.postDisplayDateFrom.after(this.previousVersion.postDisplayDateFrom)) {
+            return false;
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(this.previousVersion.postDisplayDateFrom);
+        c.add(Calendar.YEAR, 1);
+        return !c.getTime().equals(this.postDisplayDateFrom);
     }
 
     public class SubpageRequest {

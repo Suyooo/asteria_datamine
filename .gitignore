@@ -2,8 +2,11 @@ bin
 *.iml
 .classpath
 .project
+.classpath.xml
+.project.xml
 .settings
 database.db
+database.db-journal
 packages
 maview
 datamine_*

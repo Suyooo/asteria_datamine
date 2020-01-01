@@ -2,6 +2,7 @@ package be.suyo.toasdatabase.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.j256.ormlite.dao.Dao;
@@ -66,6 +67,11 @@ public class Global {
         }
         s = sBuilder.toString();
         return s;
+    }
+
+    public static java.util.Calendar getJSTTime() {
+        java.util.TimeZone tz = java.util.TimeZone.getTimeZone("JST");
+        return java.util.Calendar.getInstance(tz);
     }
 
     public static String pad(int i, int len) {
