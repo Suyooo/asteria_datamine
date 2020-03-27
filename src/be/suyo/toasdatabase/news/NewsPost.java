@@ -195,9 +195,13 @@ public class NewsPost {
 
     // Action Subpage Constructor
     public NewsPost(NewsPost parent, String transferPageId, String params) {
-        this.postImageOrAction =
-                "transfer_page_id=" + URLEncoder.encode(transferPageId, StandardCharsets.UTF_8) + "&params=" +
-                        URLEncoder.encode(params, StandardCharsets.UTF_8);
+        try {
+            this.postImageOrAction =
+                    "transfer_page_id=" + URLEncoder.encode(transferPageId, "UTF8") + "&params=" +
+                            URLEncoder.encode(params, "UTF8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         this.postPageId = Global.makeActionURLHash(transferPageId, params);
         this.postCategory = 5;
         this.postTitle = parent.postTitle + " (Subpage)";
@@ -415,7 +419,11 @@ public class NewsPost {
                 } else if (a.attr("href")
                         .startsWith("localappli://transfer?transfer_page_id=999002&transfer_page_parameter=")) {
                     // external page links should work
-                    a.attr("href", URLDecoder.decode(a.attr("href").substring(70), StandardCharsets.UTF_8));
+                    try {
+                        a.attr("href", URLDecoder.decode(a.attr("href").substring(70), "UTF8"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     a.attr("target", "_blank");
                 } else {
                     a.removeAttr("href");
