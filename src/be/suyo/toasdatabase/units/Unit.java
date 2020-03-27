@@ -92,6 +92,9 @@ public class Unit {
     @DatabaseField(columnName = "unit_max_level")
     public int unitMaxLevel;
 
+    @DatabaseField(columnName = "unit_has_bonus_level")
+    public boolean unitHasBonusLevel;
+
     @DatabaseField(columnName = "unit_game_id")
     public int unitGameId;
 
@@ -292,6 +295,7 @@ public class Unit {
         this.unitRarity = Rarity.values()[json.getInt("rank")];
         this.unitElement = Element.values()[json.getInt("element")];
         this.unitMaxLevel = json.getInt("levelCap");
+        this.unitHasBonusLevel = json.getInt("bonusLevel") > 0;
         this.unitGameId = this.unitId / 1_000_000;
         this.unitDescription = json.getString("detail");
         this.unitCv = json.getString("characterVoice");
