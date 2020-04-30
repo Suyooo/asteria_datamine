@@ -117,7 +117,7 @@ public class ExSkill {
         FRAME_DEF_OL_UP("【防御力UP】の効果を(\\d*)%、【OL増加】の効果を(\\d*)"), FRAME_HEAL_OL_UP("【HP回復】の効果を(\\d*)%、【OL増加】の効果を(\\d*)"),
         UNUSED_61, UNUSED_62, UNUSED_63, UNUSED_64, UNUSED_65, UNUSED_66, UNUSED_67, UNUSED_68, UNUSED_69, UNUSED_70,
         UNUSED_71, UNUSED_72, UNUSED_73, UNUSED_74, UNUSED_75, UNUSED_76, UNUSED_77, UNUSED_78, UNUSED_79, UNUSED_80,
-        UNUSED_81, UNUSED_82, REVIVE("HP(\\d*)");
+        HEAL("HPを(\\d*)"), UNUSED_82, REVIVE("HP(\\d*)");
         public final Pattern re;
 
         EffectType() {
