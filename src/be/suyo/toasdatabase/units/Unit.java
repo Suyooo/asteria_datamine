@@ -140,6 +140,9 @@ public class Unit {
     @DatabaseField(columnName = "unit_image_shadow")
     public String unitImageShadow;
 
+    @DatabaseField(columnName = "unit_image_preview")
+    public String unitImagePreview;
+
     // BASE STATS
 
     @DatabaseField(columnName = "unit_battle_hp")
@@ -330,6 +333,10 @@ public class Unit {
         this.unitImageParty = UnitManager.downloadResource(json.getString("partyImage"));
         this.unitImageList = UnitManager.downloadResource(json.getString("listImage"));
         this.unitImageShadow = UnitManager.downloadResource(json.getString("imageShadow"));
+        if (this.unitRarity == Rarity.AWAKENED && this.unitExType != ExType.EVOLUTION) {
+            this.unitImagePreview =
+                    UnitManager.downloadResource(json.getString("image").replaceAll("detail", "preview"));
+        }
 
         // BASE STATS
 
