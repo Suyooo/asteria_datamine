@@ -25,7 +25,10 @@ public class PartnerManager {
         for (int p = 0; p < partners.length(); p++) {
             JSONObject detailJson = partners.getJSONObject(p);
             Unit partner = Unit.get(detailJson.getInt("unitMasterId"));
-            assert partner != null;
+            if (partner == null) {
+                Logger.notify("WARNING: Found partners for unit ID " + detailJson.getInt("unitMasterId") + " but it's not in the database");
+                continue;
+            }
 
             JSONArray partnerAwakens = detailJson.getJSONArray("evolveUnitInfoList");
             Set<Integer> existingAwakens = PartnerMatch.getMatchingUnitIDsForPartner(partner);

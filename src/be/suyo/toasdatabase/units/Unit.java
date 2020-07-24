@@ -328,14 +328,14 @@ public class Unit {
 
         this.unitImageDetail = UnitManager.downloadResource(json.getString("image"));
         this.unitImageBackground = UnitManager.downloadResource(json.getString("imageBackground"));
-        this.unitImageMypage = UnitManager.downloadResource(json.getString("image").replaceAll("detail", "mypage"));
+        this.unitImageMypage = UnitManager.downloadResource(json.getString("thumbnailImage").replaceAll("thumb", "mypage"));
         this.unitImageThumbnail = UnitManager.downloadResource(json.getString("thumbnailImage"));
         this.unitImageParty = UnitManager.downloadResource(json.getString("partyImage"));
         this.unitImageList = UnitManager.downloadResource(json.getString("listImage"));
         this.unitImageShadow = UnitManager.downloadResource(json.getString("imageShadow"));
         if (this.unitRarity == Rarity.AWAKENED && this.unitExType != ExType.EVOLUTION) {
             this.unitImagePreview =
-                    UnitManager.downloadResource(json.getString("image").replaceAll("detail", "preview"));
+                    UnitManager.downloadResource(json.getString("thumbnailImage").replaceAll("thumb", "preview"));
         }
 
         // BASE STATS
