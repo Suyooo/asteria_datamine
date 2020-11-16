@@ -20,8 +20,8 @@ public enum ArteType {
         UNUSED_16,
         UNUSED_17,
         UNUSED_18,
-        PURGE_ATK_DEBUFF,
-        PURGE_DEF_DEBUFF,
+        CLEANSE_ATK_DEBUFF,
+        CLEANSE_DEF_DEBUFF,
         UNUSED_21,
         UNSEAL,
         UNUSED_23
