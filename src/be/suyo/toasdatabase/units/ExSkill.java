@@ -108,7 +108,7 @@ public class ExSkill {
         HP_DEF_UP("MAX HP[をが](\\d*)、防御力[をが](\\d*)"), HP_ATK_DEF_UP("MAX HP[をが](\\d*)、攻撃力[をが](\\d*)%?、防御力[をが](\\d*)"),
         ATK_UP_DEF_DOWN("攻撃力[をが](\\d*)(?:.*?)防御力[をが](\\d*)"), UNUSED_19, UNUSED_20, UNUSED_21, UNUSED_22, UNUSED_23,
         UNUSED_24, UNUSED_25, UNUSED_26, UNUSED_27, UNUSED_28, UNUSED_29, UNUSED_30, UNUSED_31, UNUSED_32,
-        OL_UP("OLゲージを(\\d*)"), UNUSED_34, UNUSED_35, UNUSED_36, UNUSED_37, UNUSED_38, UNUSED_39, UNUSED_40, UNUSED_41,
+        OL_UP("OLゲージを(\\d*)"), CRIT_RATE_UP("クリティカル率を(\\d*)"), UNUSED_35, UNUSED_36, UNUSED_37, UNUSED_38, UNUSED_39, UNUSED_40, UNUSED_41,
         UNUSED_42, UNUSED_43, UNUSED_44, UNUSED_45, UNUSED_46, UNUSED_47, UNUSED_48, UNUSED_49, UNUSED_50,
         FRAME_ATK_UP("【攻撃力UP】の効果を(\\d*)"), FRAME_DEF_UP("【防御力UP】の効果を(\\d*)"), FRAME_HEAL_UP("【HP回復】の効果を(\\d*)"),
         FRAME_OL_UP("【OL増加】の効果を(\\d*)"), FRAME_ATK_DEF_UP("【攻撃力UP】の効果を(\\d*)%、【防御力UP】の効果を(\\d*)"),
