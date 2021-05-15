@@ -127,8 +127,7 @@ public class PatchManager {
                             PatchUnit.save(pu);
                             Logger.println("Evo Unit (ID " + pu.punitUnitId + ") successfully updated");
                         } catch (UnitException e) {
-                            System.err.println("Evo Unit (ID " + pu.punitUnitId + ") failed: ");
-                            e.printStackTrace();
+                            Logger.println("Evo Unit (ID " + pu.punitUnitId + ") not evolved yet");
                         }
                     }
                 } catch (UnitException e) {
