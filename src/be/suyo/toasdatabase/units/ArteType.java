@@ -24,5 +24,5 @@ public enum ArteType {
         CLEANSE_DEF_DEBUFF,
         UNUSED_21,
         UNSEAL,
-        UNUSED_23
+        CRIT_RATE_DAMAGE_UP
 }
