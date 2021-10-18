@@ -47,6 +47,7 @@ public class NewsManager {
         while (category < 3) {
             params.put("category", "" + (++category));
             int page = 0;
+            boolean firstPost = true;
             page: while (true) {
                 params.put("p", "" + (++page));
                 JSONObject news = DownloadUtils.downloadAndDecryptJsonFromUrl("announce/search_announces", params);
@@ -70,8 +71,10 @@ public class NewsManager {
                         newPosts++;
                         cb.onUpdatedPost(np);
                     } else {
-                        break page;
+                        // still check second post in case the first post is old - might be a stickied one
+                        if (!firstPost) break page;
                     }
+                    firstPost = false;
                     if (newPosts > 50) {
                         new Error("Emergency canceling news download: over 50 posts").printStackTrace();
                         System.exit(1);
