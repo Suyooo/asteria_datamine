@@ -98,9 +98,10 @@ public class Characters {
                     // 3301: Sorey, merged with 3300 (Non-Shepherd Sorey)
                     // 3321: Lailah, got new ID with new seiyuu, merged with 3305 (old ID)
                     // 3502, 3504, 3506: see below
+                    // 3702: Alphen, merged with Iron Mask Alphen
                     // 9008: Purified Tirug, merged with 9001 (dark Tirug)
                     if (e.charId != 1723 && e.charId != 3301 && e.charId != 3321 && e.charId != 3502 &&
-                            e.charId != 3504 && e.charId != 3506 && e.charId != 9008) {
+                            e.charId != 3504 && e.charId != 3506 && e.charId != 3702 && e.charId != 9008) {
                         String subname = e.charNameEn;
                         // Exception for different characters with same name (see below)
                         if (!e.charNameEn.equals("Celsius")) {
