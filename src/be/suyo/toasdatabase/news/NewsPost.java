@@ -273,9 +273,11 @@ public class NewsPost {
                     a.attr("href")
                             .startsWith("localappli://transfer?transfer_page_id=999003&transfer_page_parameter=")) {
                 // download subpages if neccessary 
-                if (!a.attr("href").substring(70).startsWith("guild")) {
+                try {
                     long subpageId = Long.parseLong(a.attr("href").substring(70).trim());
                     subpages.add(new SubpageAnnounceRequest(this, subpageId));
+                } catch (NumberFormatException e) {
+                    // pass
                 }
             }
         }
