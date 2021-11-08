@@ -333,7 +333,7 @@ public class Unit {
         this.unitImageParty = UnitManager.downloadResource(json.getString("partyImage"));
         this.unitImageList = UnitManager.downloadResource(json.getString("listImage"));
         this.unitImageShadow = UnitManager.downloadResource(json.getString("imageShadow"));
-        if (this.unitRarity == Rarity.AWAKENED) {
+        if (this.unitExType != ExType.NONE && this.unitExType != ExType.AWAKENING_PARTNER) {
             this.unitImagePreview =
                     UnitManager.downloadResource(json.getString("thumbnailImage").replaceAll("thumb", "preview"));
         }
