@@ -22,7 +22,7 @@ public enum ArteType {
         UNUSED_18,
         CLEANSE_ATK_DEBUFF,
         CLEANSE_DEF_DEBUFF,
-        UNUSED_21,
+        CLEANSE_ATK_DEF_DEBUFF,
         UNSEAL,
         CRIT_RATE_DAMAGE_UP
 }
