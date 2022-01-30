@@ -119,7 +119,7 @@ public class ExSkill {
         UNUSED_71, UNUSED_72, UNUSED_73, UNUSED_74, UNUSED_75, UNUSED_76, UNUSED_77, UNUSED_78, UNUSED_79, UNUSED_80,
         HEAL("HPを(\\d*)"), UNUSED_82, REVIVE("HP(\\d*)"), UNUSED_84, UNUSED_85, UNUSED_86, UNUSED_87, UNUSED_88, UNUSED_89, UNUSED_90,
         UNUSED_91, UNUSED_92, UNUSED_93, UNUSED_94, UNUSED_95, UNUSED_96, UNUSED_97, UNUSED_98, UNUSED_99, UNUSED_100,
-        UNUSED_101, UNUSED_102, UNUSED_103, UNUSED_104, DEF_UP_AND_PARA_RES("防御力を(\\d*)アップし、状態異常「麻痺」に(\\d*)%の");
+        ATK_UP_AND_PSN_RES("攻撃力を(\\d*)アップし、状態異常「毒」に(\\d*)%の"), UNUSED_102, UNUSED_103, UNUSED_104, DEF_UP_AND_PARA_RES("防御力を(\\d*)アップし、状態異常「麻痺」に(\\d*)%の");
         public final Pattern re;
 
         EffectType() {
