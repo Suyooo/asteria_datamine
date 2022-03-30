@@ -65,9 +65,15 @@ public class Arte {
         JSONObject jsonDetail = json.getJSONArray("detailList").getJSONObject(0);
         this.arteId = json.getInt("id");
         this.arteName = json.getString("name");
+        if (jsonDetail.getInt("type") >= ArteType.values().length) {
+            throw new UnitException("Arte Type #" + jsonDetail.getInt("type") + " not in enum");
+        }
         this.arteType = ArteType.values()[jsonDetail.getInt("type")];
         this.arteValue = jsonDetail.getInt("value");
         this.arteHits = json.getInt("hitNum");
+        if (jsonDetail.getInt("target") >= Target.values().length) {
+            throw new UnitException("Target Type #" + jsonDetail.getInt("target") + " not in enum");
+        }
         this.arteTarget = Target.values()[jsonDetail.getInt("target")];
         this.arteChance = json.getInt("invocationRate");
         this.arteMaxLevel = json.getInt("level");

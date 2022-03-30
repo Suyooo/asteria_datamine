@@ -65,8 +65,17 @@ public class ExSkill {
 
     public void update(JSONObject json) {
         this.exId = json.getInt("id");
+        if (json.getInt("category") >= EffectType.values().length) {
+            throw new UnitException("EX Skill Effect Type #" + json.getInt("category") + " not in enum");
+        }
         this.exTypeEffect = EffectType.values()[json.getInt("category")];
+        if (json.getInt("conditionType") >= ConditionType.values().length) {
+            throw new UnitException("EX Skill Condition Type #" + json.getInt("conditionType") + " not in enum");
+        }
         this.exTypeCondition = ConditionType.values()[json.getInt("conditionType")];
+        if (json.getInt("valueType") >= ValueType.values().length) {
+            throw new UnitException("EX Skill Value Type #" + json.getInt("valueType") + " not in enum");
+        }
         this.exTypeValue = ValueType.values()[json.getInt("valueType")];
         this.exMaxLevel = json.getInt("maxLevel");
         if (json.has("invokeVoice")) {

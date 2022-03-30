@@ -60,11 +60,17 @@ public class BondPotential {
 
     public void update(JSONObject json) {
         this.bpotId = json.getInt("id");
+        if (json.getInt("type") >= PotentialType.values().length) {
+            throw new UnitException("Bond Potential Type #" + json.getInt("type") + " not in enum");
+        }
         this.bpotType = PotentialType.values()[json.getInt("type")];
         this.bpotChance = json.getInt("invocationRate");
         this.bpotValue1 = json.getInt("value1");
         this.bpotValue2 = json.getInt("value2");
         this.bpotValue3 = json.getInt("value3");
+        if (json.getInt("target") >= Target.values().length) {
+            throw new UnitException("Target Type #" + json.getInt("target") + " not in enum");
+        }
         this.bpotTarget = Target.values()[json.getInt("target")];
         this.bpotTurns = json.getInt("turn");
 
