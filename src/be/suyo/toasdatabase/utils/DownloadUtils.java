@@ -17,6 +17,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import be.suyo.toasdatabase.logging.Logger;
 import org.json.JSONObject;
 
 import be.suyo.toascrypt.file.FileCrypt;
@@ -74,6 +75,7 @@ public class DownloadUtils {
     }
 
     public static JSONObject downloadAndDecryptJsonFromUrl(String url, Map<String, String> params) {
+        Logger.println("Downloading JSON " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -84,6 +86,7 @@ public class DownloadUtils {
             } catch (FileNotFoundException e) {
                 throw new DownloadException("URL does not exist", e);
             } catch (Exception e) {
+                Logger.println("Fail " + e.getMessage());
                 lastEx = e;
                 retries++;
             }
@@ -92,6 +95,7 @@ public class DownloadUtils {
     }
 
     public static String downloadTextFromUrl(String url) {
+        Logger.println("Downloading Text " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -101,6 +105,7 @@ public class DownloadUtils {
             } catch (FileNotFoundException e) {
                 throw new DownloadException("URL does not exist", e);
             } catch (Exception e) {
+                Logger.println("Fail " + e.getMessage());
                 lastEx = e;
                 retries++;
             }
@@ -109,6 +114,7 @@ public class DownloadUtils {
     }
 
     public static void downloadUpdatePackage(int package_id, String url) {
+        Logger.println("Downloading Package " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -126,6 +132,7 @@ public class DownloadUtils {
             } catch (FileNotFoundException e) {
                 throw new DownloadException("URL does not exist", e);
             } catch (Exception e) {
+                Logger.println("Fail " + e.getMessage());
                 lastEx = e;
                 retries++;
             }
@@ -138,6 +145,7 @@ public class DownloadUtils {
     }
 
     public static byte[] downloadFileFromResourceUrl(String url, boolean writeToFile, String destFolder) {
+        Logger.println("Downloading File " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -157,6 +165,7 @@ public class DownloadUtils {
             } catch (FileNotFoundException e) {
                 throw new DownloadException("URL does not exist", e);
             } catch (Exception e) {
+                Logger.println("Fail " + e.getMessage());
                 lastEx = e;
                 retries++;
             }
@@ -169,6 +178,7 @@ public class DownloadUtils {
     }
 
     public static byte[] downloadAndDecryptFileFromResourceUrl(String url, boolean writeToFile, String filename) {
+        Logger.println("Downloading Encrypted File " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -189,6 +199,7 @@ public class DownloadUtils {
             } catch (FileNotFoundException e) {
                 throw new DownloadException("URL does not exist", e);
             } catch (Exception e) {
+                Logger.println("Fail " + e.getMessage());
                 lastEx = e;
                 retries++;
             }
