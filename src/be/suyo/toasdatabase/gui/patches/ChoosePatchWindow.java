@@ -53,7 +53,9 @@ public class ChoosePatchWindow extends BasicWindow {
         edit.setEnabled(false);
         Button name = new Button("Name Change");
         name.setEnabled(false);
-        mainPanel.addComponent(Panels.vertical(create, from_package, edit, name), BorderLayout.Location.RIGHT);
+        Button delete = new Button("Delete");
+        delete.setEnabled(false);
+        mainPanel.addComponent(Panels.vertical(create, from_package, edit, name, delete), BorderLayout.Location.RIGHT);
 
         exit = new Button("Return", this::close);
         mainPanel.addComponent(exit, BorderLayout.Location.BOTTOM);
@@ -122,6 +124,10 @@ public class ChoosePatchWindow extends BasicWindow {
                     Patch.save(p);
                     refreshPatchList();
                 }
+            } else if (key.getCharacter() == 'd' || key.getCharacter() == 'D') {
+                Patch p = patchesContent.get(patches.getSelectedIndex());
+                Patch.delete(p);
+                refreshPatchList();
             } else if (key.getCharacter() >= '0' && key.getCharacter() <= '9') {
                 int taskIndex = (int) key.getCharacter() - (int) '1';
                 if (taskIndex < 0) {

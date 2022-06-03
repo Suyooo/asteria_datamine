@@ -46,6 +46,14 @@ public class Patch {
         }
     }
 
+    public static void delete(Patch p) {
+        try {
+            dao.delete(p);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
     public static CloseableIterator<Patch> getIterator() {
         try {
             return dao.iterator(queryReverseOrder);
