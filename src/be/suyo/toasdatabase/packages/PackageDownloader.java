@@ -31,13 +31,15 @@ public class PackageDownloader {
 
     public static boolean isNewPackageAvailable() {
         JSONObject adddata = DownloadUtils.downloadAndDecryptJsonFromUrl("api/getAdditionalDataList", new HashMap<>());
-        JSONArray packages = adddata.getJSONArray("additional_data_list");
-        int start_pid = Integer.parseInt(Global.getValue("current_asset_id"));
-        for (int i = 0; i < packages.length(); i++) {
-            JSONObject p = packages.getJSONObject(i);
-            int pid = p.getInt("revision");
-            if (pid > start_pid) {
-                return true;
+        if (adddata.has("additional_data_list")) {
+            JSONArray packages = adddata.getJSONArray("additional_data_list");
+            int start_pid = Integer.parseInt(Global.getValue("current_asset_id"));
+            for (int i = 0; i < packages.length(); i++) {
+                JSONObject p = packages.getJSONObject(i);
+                int pid = p.getInt("revision");
+                if (pid > start_pid) {
+                    return true;
+                }
             }
         }
         return false;
