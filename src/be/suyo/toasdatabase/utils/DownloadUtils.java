@@ -75,7 +75,7 @@ public class DownloadUtils {
     }
 
     public static JSONObject downloadAndDecryptJsonFromUrl(String url, Map<String, String> params) {
-        Logger.println("Downloading JSON " + url);
+        //Logger.println("Downloading JSON " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -95,7 +95,7 @@ public class DownloadUtils {
     }
 
     public static String downloadTextFromUrl(String url) {
-        Logger.println("Downloading Text " + url);
+        //Logger.println("Downloading Text " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -114,7 +114,7 @@ public class DownloadUtils {
     }
 
     public static void downloadUpdatePackage(int package_id, String url) {
-        Logger.println("Downloading Package " + url);
+        //Logger.println("Downloading Package " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -145,7 +145,7 @@ public class DownloadUtils {
     }
 
     public static byte[] downloadFileFromResourceUrl(String url, boolean writeToFile, String destFolder) {
-        Logger.println("Downloading File " + url);
+        //Logger.println("Downloading File " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {
@@ -178,7 +178,7 @@ public class DownloadUtils {
     }
 
     public static byte[] downloadAndDecryptFileFromResourceUrl(String url, boolean writeToFile, String filename) {
-        Logger.println("Downloading Encrypted File " + url);
+        //Logger.println("Downloading Encrypted File " + url);
         byte retries = 0;
         Exception lastEx = null;
         while (retries < MAX_RETRIES) {

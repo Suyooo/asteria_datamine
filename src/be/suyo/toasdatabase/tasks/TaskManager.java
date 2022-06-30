@@ -3,9 +3,14 @@ package be.suyo.toasdatabase.tasks;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import be.suyo.toasdatabase.logging.Logger;
+import be.suyo.toasdatabase.utils.DownloadUtils;
+import be.suyo.toasdatabase.utils.Global;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class TaskManager {
     @SuppressWarnings("rawtypes")
@@ -16,6 +21,11 @@ public class TaskManager {
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
+        JSONObject adddata = DownloadUtils.downloadAndDecryptJsonFromUrl("api/getAdditionalDataList", new HashMap<>());
+        if (!adddata.has("additional_data_list")) {
+            // maintenance
+            return;
+        }
         if (args.length >= 2 && args[0].equals("run")) {
             for (int a = 1; a < args.length; a++) {
                 try {
