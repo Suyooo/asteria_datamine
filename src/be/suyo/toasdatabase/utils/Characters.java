@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
+import be.suyo.toasdatabase.units.Unit;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
@@ -16,6 +16,8 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
 
 import be.suyo.toasdatabase.logging.Logger;
+
+import static java.util.Map.entry;
 
 public class Characters {
     private static Dao<Entry, Integer> dao = DatabaseConnection.getDao(Entry.class);
@@ -75,67 +77,25 @@ public class Characters {
         }
     }
 
+    private static Map<Integer, int[]> merges =
+            Map.ofEntries(entry(1201, new int[]{9986}), entry(1202, new int[]{9987}),
+                    entry(1203, new int[]{9015, 9988}), entry(1204, new int[]{9012}), entry(1401, new int[]{9002}),
+                    entry(1402, new int[]{9005}), entry(1701, new int[]{1723, 9016}),
+                    entry(1710, new int[]{3601, 9013}), entry(2201, new int[]{9003}), entry(2401, new int[]{2409}),
+                    entry(2501, new int[]{2521, 2550, 9009}), entry(2502, new int[]{2551}),
+                    entry(2503, new int[]{2523}), entry(2505, new int[]{2524}), entry(2801, new int[]{3114}),
+                    entry(2802, new int[]{3121, 9004}), entry(2803, new int[]{3115}), entry(2804, new int[]{3116}),
+                    entry(2805, new int[]{3117}), entry(2806, new int[]{3118}), entry(2808, new int[]{3120}),
+                    entry(2810, new int[]{3122}), entry(2817, new int[]{3119}),
+                    entry(3300, new int[]{3301, 3501, 3502, 9014}), entry(3302, new int[]{3505, 3506}),
+                    entry(3303, new int[]{9011}), entry(3304, new int[]{9010}), entry(3305, new int[]{3321, 3507}),
+                    entry(3307, new int[]{3410}), entry(3308, new int[]{3503, 3504}), entry(3411, new int[]{3412}),
+                    entry(3416, new int[]{3417}), entry(3501, new int[]{3502}), entry(3503, new int[]{3504}),
+                    entry(3505, new int[]{3506}), entry(3701, new int[]{3702}), entry(9001, new int[]{9008}));
+
     public static void createCharFilterTemplate() {
         try {
             Map<String, String> combined = new TreeMap<>();
-            CloseableIterator<Entry> it = getIterator();
-            assert it != null;
-            while (it.hasNext()) {
-                Entry e = it.next();
-                String s = "";
-
-                // Exception for GBF 2018 Collab to order it next to GBF 2017 Collab
-                if (e.charId / 10 == 996) {
-                    s = "9919,#,";
-                }
-
-                if (combined.containsKey(e.charNameEn)) {
-                    s = combined.get(e.charNameEn) + ",";
-
-                    // Exception for same chars in same game with different IDs
-                    // These should not appear as a seperate filter option
-                    // 1723: Short hair Luke, merged with 1701 (long hair Luke)
-                    // 3301: Sorey, merged with 3300 (Non-Shepherd Sorey)
-                    // 3321: Lailah, got new ID with new seiyuu, merged with 3305 (old ID)
-                    // 3502, 3504, 3506: see below
-                    // 3702: Alphen, merged with Iron Mask Alphen
-                    // 9008: Purified Tirug, merged with 9001 (dark Tirug)
-                    if (e.charId != 1723 && e.charId != 3301 && e.charId != 3321 && e.charId != 3502 &&
-                            e.charId != 3504 && e.charId != 3506 && e.charId != 3702 && e.charId != 9008) {
-                        String subname = e.charNameEn;
-                        // Exception for different characters with same name (see below)
-                        if (!e.charNameEn.equals("Celsius")) {
-                            if (e.charSubtitleEn != null) {
-                                subname += " [" + e.charSubtitleEn + "]";
-                            }
-                        }
-
-                        while (combined.containsKey(subname)) {
-                            subname += "|";
-                        }
-
-                        // Exceptions for TOZX because for some reason the awakenend
-                        // versions of their 6*s count as seperate characters
-                        // 3501 <-> 3502 (Sorey), 3503 <-> 3504 (Rose), 3505 <-> 3506 (Alisha)
-                        if (e.charId == 3501 || e.charId == 3503 || e.charId == 3505) {
-                            combined.put(subname, e.charId + "," + (e.charId + 1));
-                        } else {
-                            combined.put(subname, "" + e.charId);
-                            if (e.charNameEn.equals("Celsius")) {
-                                // do not extend TOE Celsius list with the ID of TOX Celsius
-                                continue;
-                            }
-                        }
-                    }
-                }
-                s += e.charId;
-                combined.put(e.charNameEn, s);
-            }
-
-            Map<String, String> ordered = new TreeMap<>();
-            for (Map.Entry<String, String> e : combined.entrySet()) {
-                ordered.put(e.getValue(), e.getKey());
-            }
 
             File file = new File("templates/filters_character.phtml");
             if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
@@ -143,35 +103,63 @@ public class Characters {
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write("\t\t\t<option value=\"0\">-</option>\n");
-            int lastgame = 0;
-            for (Map.Entry<String, String> e : ordered.entrySet()) {
-                int commaPos = e.getKey().indexOf(",");
-                int thisGame = Integer.parseInt((commaPos == -1) ? e.getKey() : e.getKey().substring(0, commaPos)) / 10;
-                if (thisGame < 990) {
-                    thisGame /= 10;
-                }
-                if (thisGame != lastgame) {
-                    if (lastgame != 0) {
-                        writer.write("\t\t\t</optgroup>\n");
-                    }
-                    writer.write("\t\t\t<optgroup label=\"" + Sources.getSourceNameEn(thisGame) +
-                            ((thisGame >= 100) ? " (Collaboration)" : "") + "\">\n");
-                    lastgame = thisGame;
+
+            String indentHtml = "";
+            String indentText = "";
+
+            for (int sourceId : Sources.getSortedSourceIDList()) {
+                if (sourceId == 99) {
+                    // Collabs begin
+                    writer.write("\t\t\t<optgroup label=\"Collaborations\">\n");
+                    indentHtml = "\t";
+                    indentText = "&nbsp;&nbsp;&nbsp;&nbsp;";
+                    continue;
                 }
 
-                String optionValues = e.getKey();
-                // Exception for GBF 2018 Collab to order it next to GBF 2017 Collab
-                if (optionValues.startsWith("9919,#,")) {
-                    optionValues = optionValues.substring(7);
+                writer.write(indentHtml + "\t\t\t<optgroup label=\"" + indentText + Sources.getSourceNameEn(sourceId) +
+                        "\">\n");
+
+                CloseableIterator<Unit> it = Unit.getCharsForSource(sourceId);
+                while (it.hasNext()) {
+                    Unit e = it.next();
+                    int charId = e.unitId / 10000;
+
+                    // Char IDs to skip (merged with others, should not appear as a seperate filter option)
+                    // 1723: Short hair Luke, merged with 1701 (long hair Luke)
+                    // 3301: Shepherd Sorey, merged with 3300 (Non-Shepherd Sorey)
+                    // 3321: Lailah, got new ID with seiyuu change, merged with 3305 (old ID)
+                    // 3502, 3504, 3506: TOZX BAW characters with seperate IDs, see below
+                    // 3702: Unmasked Alphen, merged with 3701 (Iron Mask Alphen)
+                    // 9008: Purified Tirug, merged with 9001 (Dark Tirug)
+                    if (charId == 1723 || charId == 3301 || charId == 3321 || charId == 3502 || charId == 3504 ||
+                            charId == 3506 || charId == 3702 || charId == 9008) {
+                        continue;
+                    }
+
+                    Entry character = dao.queryForId(charId);
+                    String name = character.charNameEn;
+                    if (!character.charNameEn.equals("Celsius") && character.charSubtitleEn != null) {
+                        // Add subtitle (unless it's Celsius who's different characters in different games)
+                        name += " [" + character.charSubtitleEn + "]";
+                    }
+
+                    writer.write(indentHtml + "\t\t\t\t<option value=\"" + charId);
+
+                    if (merges.containsKey(charId)) {
+                        for (int mergedCharId : merges.get(charId)) {
+                            writer.write("," + mergedCharId);
+                        }
+                    }
+
+                    writer.write("\">" + indentText + name + "</option>\n");
                 }
-                String optionName = e.getValue();
-                while (optionName.endsWith("|")) {
-                    optionName = optionName.substring(0, optionName.length() - 1);
-                }
-                writer.write("\t\t\t\t<option value=\"" + optionValues + "\">" + optionName + "</option>\n");
+
+                writer.write(indentHtml + "\t\t\t</optgroup>\n");
             }
             writer.write("\t\t\t</optgroup>");
             writer.close();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
         } catch (IOException e) {
             e.printStackTrace();
         }

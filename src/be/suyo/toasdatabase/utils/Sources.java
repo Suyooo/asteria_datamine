@@ -5,8 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
@@ -75,43 +74,55 @@ public class Sources {
         }
     }
 
-    public static void createSrcFilterTemplate() {
+    public static List<Integer> getSortedSourceIDList() {
         try {
-            Map<String, String> combined = new TreeMap<>();
-            CloseableIterator<Entry> it = getIterator();
-            assert it != null;
+            List<Integer> res = new LinkedList<>();
+            QueryBuilder<Entry, Integer> qb = dao.queryBuilder();
+            qb.orderBy("src_id", true);
+            CloseableIterator<Entry> it = dao.iterator(qb.prepare());
+
+            Map<String, Integer> collabsAlphabetical = new TreeMap<>();
             while (it.hasNext()) {
                 Entry e = it.next();
-                String s = "";
-                if (combined.containsKey(e.srcNameEn)) {
-                    s = combined.get(e.srcNameEn) + ",";
+                if (e.srcId <= 99) {
+                    if (e.srcId != 95) {
+                        res.add(e.srcId);
+                    }
+                } else {
+                    collabsAlphabetical.put(
+                            (e.srcNameEn.startsWith("The ") ? e.srcNameEn.substring(4) : e.srcNameEn).toLowerCase(
+                                    Locale.ROOT), e.srcId);
                 }
-                s += e.srcId;
-                combined.put(e.srcNameEn, s);
             }
 
-            Map<String, String> ordered = new TreeMap<>();
-            for (Map.Entry<String, String> e : combined.entrySet()) {
-                ordered.put(e.getValue(), e.getKey());
+            for (Map.Entry<String, Integer> e : collabsAlphabetical.entrySet()) {
+                res.add(e.getValue());
             }
 
+            return res;
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    public static void createSrcFilterTemplate() {
+        try {
             File file = new File("templates/filters_source.phtml");
             if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                 throw new IOException("mkdirs failed");
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write("\t\t\t<option value=\"0\">-</option>\n");
-            for (Map.Entry<String, String> e : ordered.entrySet()) {
-                if (e.getKey().length() <= 2) {
-                    if (e.getKey().equals("99")) {
-                        writer.write("\t\t\t<optgroup label=\"Collaborations\">\n");
-                    } else {
-                        writer.write("\t\t\t<option value=\"" + e.getKey() + "\">" + e.getValue() + "</option>\n");
-                    }
-                } else {
-                    writer.write("\t\t\t\t<option value=\"" + e.getKey() + "\">" + e.getValue() + "</option>\n");
+
+            for (int sourceId : getSortedSourceIDList()) {
+                if (sourceId == 99) {
+                    writer.write("\t\t\t<optgroup label=\"Collaborations\">\n");
+                } else if (sourceId != 95) {
+                    writer.write(
+                            "\t\t\t<option value=\"" + sourceId + "\">" + getSourceNameEn(sourceId) + "</option>\n");
                 }
             }
+
             writer.write("\t\t\t</optgroup>");
             writer.close();
         } catch (IOException e) {

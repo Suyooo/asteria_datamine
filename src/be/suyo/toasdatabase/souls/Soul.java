@@ -66,6 +66,9 @@ public class Soul {
     @DatabaseField(columnName = "soul_subtitle_id", foreign = true)
     public Subtitle soulSubtitle;
 
+    @DatabaseField(columnName = "soul_game_id")
+    public int soulGameId;
+
     @DatabaseField(columnName = "soul_image")
     public String soulImage;
 
@@ -145,6 +148,7 @@ public class Soul {
                     this.soulSubtitle = Subtitle.getSubtitleForUnitName(json.getString("name").trim());
                     Logger.notify("[WARNING] Soul " + this.soulId + " has no ingame ID");
                 }
+                this.soulGameId = this.soulId / 10000;
                 this.soulImage = json.getString("image");
                 DownloadUtils.downloadAndDecryptFileFromResourceUrl(json.getString("image"), true);
                 this.soulType =

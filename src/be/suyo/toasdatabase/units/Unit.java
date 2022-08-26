@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import be.suyo.toasdatabase.logging.Logger;
+import com.j256.ormlite.stmt.QueryBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -59,6 +60,18 @@ public class Unit {
 
     public static CloseableIterator<Unit> getIterator() {
         return dao.iterator();
+    }
+
+    public static CloseableIterator<Unit> getCharsForSource(int sourceId) {
+        try {
+            QueryBuilder<Unit, Integer> qb = dao.queryBuilder();
+            qb.where().eq("unit_game_id", sourceId);
+            qb.groupByRaw("unit_id/10000");
+            qb.orderBy("unit_id", true);
+            return dao.iterator(qb.prepare());
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
     public static void save(Unit u) {
@@ -328,7 +341,8 @@ public class Unit {
 
         this.unitImageDetail = UnitManager.downloadResource(json.getString("image"));
         this.unitImageBackground = UnitManager.downloadResource(json.getString("imageBackground"));
-        this.unitImageMypage = UnitManager.downloadResource(json.getString("thumbnailImage").replaceAll("thumb", "mypage"));
+        this.unitImageMypage =
+                UnitManager.downloadResource(json.getString("thumbnailImage").replaceAll("thumb", "mypage"));
         this.unitImageThumbnail = UnitManager.downloadResource(json.getString("thumbnailImage"));
         this.unitImageParty = UnitManager.downloadResource(json.getString("partyImage"));
         this.unitImageList = UnitManager.downloadResource(json.getString("listImage"));
@@ -381,8 +395,8 @@ public class Unit {
             if (maJson.has("evolveInfo")) {
                 this.unitMaEx = UnitManager.updateMysticArteEx(maJson);
                 if (maJson.getJSONObject("evolveInfo").has("potentialSkill")) {
-                    this.unitMaExBPot = UnitManager
-                            .updateBondPotential(maJson.getJSONObject("evolveInfo").getJSONObject("potentialSkill"));
+                    this.unitMaExBPot = UnitManager.updateBondPotential(
+                            maJson.getJSONObject("evolveInfo").getJSONObject("potentialSkill"));
                 }
             }
         } else {
@@ -435,20 +449,20 @@ public class Unit {
                 case 3:
                     this.unitTfBaseArte3 = UnitManager.updateArte(baseartes.getJSONObject(2));
                     if (baseartes.getJSONObject(2).has("potentialSkill")) {
-                        this.unitTfBaseArte3BPot = UnitManager
-                                .updateBondPotential(baseartes.getJSONObject(2).getJSONObject("potentialSkill"));
+                        this.unitTfBaseArte3BPot = UnitManager.updateBondPotential(
+                                baseartes.getJSONObject(2).getJSONObject("potentialSkill"));
                     }
                 case 2:
                     this.unitTfBaseArte2 = UnitManager.updateArte(baseartes.getJSONObject(1));
                     if (baseartes.getJSONObject(1).has("potentialSkill")) {
-                        this.unitTfBaseArte2BPot = UnitManager
-                                .updateBondPotential(baseartes.getJSONObject(1).getJSONObject("potentialSkill"));
+                        this.unitTfBaseArte2BPot = UnitManager.updateBondPotential(
+                                baseartes.getJSONObject(1).getJSONObject("potentialSkill"));
                     }
                 case 1:
                     this.unitTfBaseArte1 = UnitManager.updateArte(baseartes.getJSONObject(0));
                     if (baseartes.getJSONObject(0).has("potentialSkill")) {
-                        this.unitTfBaseArte1BPot = UnitManager
-                                .updateBondPotential(baseartes.getJSONObject(0).getJSONObject("potentialSkill"));
+                        this.unitTfBaseArte1BPot = UnitManager.updateBondPotential(
+                                baseartes.getJSONObject(0).getJSONObject("potentialSkill"));
                     }
             }
         } else {
@@ -554,11 +568,10 @@ public class Unit {
 
         int coop = (this.unitCoopSkill == null) ? 0 : this.unitCoopSkill.statHashCode();
 
-        return Objects
-                .hash(this.unitExType, this.unitBattleHp, this.unitBattleAtk, this.unitBattleDef, arte1, arte2, arte3,
-                        arte1b, arte2b, arte3b, ma, mab, maex, maexb, dma, dmab, dmaex, dmaexb, ex, extf, tfarte1,
-                        tfarte2, tfarte3, tfarte1b, tfarte2b, tfarte3b, coop, this.unitCoopPAtk, this.unitCoopMAtk,
-                        this.unitCoopPDef, this.unitCoopMDef);
+        return Objects.hash(this.unitExType, this.unitBattleHp, this.unitBattleAtk, this.unitBattleDef, arte1, arte2,
+                arte3, arte1b, arte2b, arte3b, ma, mab, maex, maexb, dma, dmab, dmaex, dmaexb, ex, extf, tfarte1,
+                tfarte2, tfarte3, tfarte1b, tfarte2b, tfarte3b, coop, this.unitCoopPAtk, this.unitCoopMAtk,
+                this.unitCoopPDef, this.unitCoopMDef);
     }
 
     public String toString() {
