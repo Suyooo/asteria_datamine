@@ -59,6 +59,10 @@ public class PatchCategory {
 
     public static void delete(PatchCategory pc) {
         try {
+            CloseableIterator<PatchUnit> units = PatchUnit.getByPCatId(pc.pcatId);
+            while (units.hasNext()) {
+                PatchUnit.delete(units.next());
+            }
             dao.delete(pc);
         } catch (SQLException e) {
             throw new DatabaseException(e);

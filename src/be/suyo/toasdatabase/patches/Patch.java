@@ -48,6 +48,10 @@ public class Patch {
 
     public static void delete(Patch p) {
         try {
+            CloseableIterator<PatchCategory> cats = PatchCategory.getByPatchId(p.patchId);
+            while (cats.hasNext()) {
+                PatchCategory.delete(cats.next());
+            }
             dao.delete(p);
         } catch (SQLException e) {
             throw new DatabaseException(e);
