@@ -22,11 +22,6 @@ import be.suyo.toasdatabase.utils.Sources;
 public class UnitManager {
     public static Set<Future<byte[]>> futureSet;
 
-    public static void main(String[] args) {
-        System.out.println(downloadUnit(14030130));
-        ShutdownManager.shutdown();
-    }
-
     public static Unit downloadUnit(int unit_id) {
         futureSet = new HashSet<>();
         Unit u = updateUnit(unit_id);

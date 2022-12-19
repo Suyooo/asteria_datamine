@@ -589,8 +589,10 @@ public class Unit {
             }
         }
         s.append("Souls {");
-        for (SoulMatch m : unitSoulMatches) {
-            s.append(m.smchSoul.toString()).append(" ,");
+        if (unitSoulMatches != null) {
+            for (SoulMatch m : unitSoulMatches) {
+                s.append(m.smchSoul.toString()).append(" ,");
+            }
         }
         s.append("\n}\nSubquests {");
         for (Subquest q : unitSubquests) {

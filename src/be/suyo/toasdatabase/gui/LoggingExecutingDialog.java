@@ -77,6 +77,9 @@ public class LoggingExecutingDialog extends BasicWindow implements LoggerIFace {
                 task.run();
             } catch (Throwable e) {
                 doPrintln("Thrown: " + e.toString());
+                for (StackTraceElement st : e.getStackTrace()) {
+                    doPrintln(st.toString());
+                }
             }
             doPrintln("");
             Logger.currentLogger = null;

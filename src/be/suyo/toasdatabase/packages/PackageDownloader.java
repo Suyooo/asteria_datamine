@@ -116,8 +116,8 @@ public class PackageDownloader {
                 }
             }
 
-            Patch p = PatchManager
-                    .createPatch(packageId, "PENDING", new SimpleDateFormat("MMM d, yyyy").format(new Date()));
+            Patch p = PatchManager.createPatch(packageId, "Untitled Patch (#" + packageId + ")",
+                    new SimpleDateFormat("MMM d, yyyy").format(new Date()));
             PatchCategory c = PatchManager.createCategory(p, null, 0);
             for (HashMap.Entry<Integer, PatchUnit.Change> entry : newUnits.entrySet()) {
                 PatchManager.createPendingUnit(entry.getKey(), entry.getValue(), c);
