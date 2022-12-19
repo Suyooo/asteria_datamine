@@ -96,6 +96,8 @@ public class PackageDownloader {
                 newUnits.put(unit.unitId,
                         unit.isEvolved ? PatchUnit.Change.EVOLUTION_ADDED : PatchUnit.Change.NEW_UNIT);
             }
+            if (newUnits.size() == 0) return;
+
             for (Integer unitId : newUnits.keySet()) {
                 Unit prevU = Unit.get(unitId);
                 if (prevU != null) {
@@ -116,7 +118,7 @@ public class PackageDownloader {
                 }
             }
 
-            Patch p = PatchManager.createPatch(packageId, "Untitled Patch (#" + packageId + ")",
+            Patch p = PatchManager.createPatch(packageId, "Uncategorized Patch (#" + packageId + ")",
                     new SimpleDateFormat("MMM d, yyyy").format(new Date()));
             PatchCategory c = PatchManager.createCategory(p, null, 0);
             for (HashMap.Entry<Integer, PatchUnit.Change> entry : newUnits.entrySet()) {
