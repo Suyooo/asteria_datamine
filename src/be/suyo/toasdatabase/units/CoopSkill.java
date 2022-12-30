@@ -125,16 +125,16 @@ public class CoopSkill {
     public enum CoopSkillType {
         UNUSED_0, ATTACK, UNUSED_2, UNUSED_3, UNUSED_4, SHOT, UNUSED_6, PATK_BOOST, UNUSED_8, MATK_BOOST, UNUSED_10,
         PDEF_BOOST, UNUSED_12, MDEF_BOOST, UNUSED_14, APPEAL_TARGET, HIDDEN_TARGET, CROSS_COUNTER, GUARD, HEAL,
-        UNUSED_20, UNUSED_21, POISON_GUARD, UNUSED_23, UNUSED_24, UNUSED_25, UNUSED_26, UNISON_MATK_BOOST, UNUSED_28, UNUSED_29,
-        UNUSED_30, UNUSED_31, UNUSED_32, UNUSED_33, UNUSED_34, UNUSED_35, UNUSED_36, UNUSED_37, UNUSED_38, UNUSED_39,
-        UNUSED_40, UNUSED_41, UNUSED_42, UNUSED_43, UNUSED_44, UNUSED_45, UNUSED_46, UNUSED_47, UNUSED_48, UNUSED_49,
-        PROTECT
+        UNUSED_20, UNUSED_21, POISON_GUARD, UNUSED_23, UNUSED_24, UNISON_PATK_BOOST, UNUSED_26, UNISON_MATK_BOOST,
+        UNUSED_28, UNUSED_29, UNUSED_30, UNUSED_31, UNUSED_32, UNUSED_33, UNUSED_34, UNUSED_35, UNUSED_36, UNUSED_37,
+        UNUSED_38, UNUSED_39, UNUSED_40, UNUSED_41, UNUSED_42, UNUSED_43, UNUSED_44, UNUSED_45, UNUSED_46, UNUSED_47,
+        UNUSED_48, UNUSED_49, PROTECT
     }
 
     public enum CoopVariantType {
-        NONE, CHAIN_PLUS("さらに物理チェイン数が(\\d*?)増加する"), DRAIN("さらに与えたダメージに応じてHPが回復する"), HP_LOST("使用後、自分のHPが(\\d*?)%減少する"),
-        LUCK_HEAL("さらに(\\d*?)%の確率で自分のHPが(\\d*?)%回復する"), REVENGE("さらに戦闘不能人数が多いほど威力が上がる"),
-        VITAL_PINCH("さらに自分のHPが30%以下の時、威力が上がる");
+        NONE, CHAIN_PLUS("さらに物理チェイン数が(\\d*?)増加する"), DRAIN("さらに与えたダメージに応じてHPが回復する"),
+        HP_LOST("使用後、自分のHPが(\\d*?)%減少する"), LUCK_HEAL("さらに(\\d*?)%の確率で自分のHPが(\\d*?)%回復する"),
+        REVENGE("さらに戦闘不能人数が多いほど威力が上がる"), VITAL_PINCH("さらに自分のHPが30%以下の時、威力が上がる");
         public final Pattern re;
 
         CoopVariantType() {
