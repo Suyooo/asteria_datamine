@@ -133,7 +133,8 @@ public class ExSkill {
         UNUSED_104, DEF_UP_AND_PARA_RES("防御力を(\\d*)アップし、状態異常「麻痺」に(\\d*)%の"), UNUSED_106,
         ATK_UP_AND_STUN_RES("攻撃力[をが](\\d*)アップし、状態異常「気絶」に(\\d*)%の耐性を持つ"), UNUSED_108,
         HP_UP_AND_STUN_RES("HPを(\\d*)アップし、状態異常「気絶」に(\\d*)%の耐性を持つ"),
-        ATK_UP_AND_SEAL_RES("攻撃力[をが](\\d*)アップし、「封印」付与に(\\d*)%の耐性を持つ");
+        ATK_UP_AND_SEAL_RES("攻撃力[をが](\\d*)アップし、「封印」付与に(\\d*)%の耐性を持つ"),
+        DEF_UP_AND_SEAL_RES("防御力[をが](\\d*)アップし、「封印」付与に(\\d*)%の耐性を持つ");
         public final Pattern re;
 
         EffectType() {
