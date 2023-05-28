@@ -58,13 +58,17 @@ public class DatamineHelper {
                 for (String s : ccbi.getResourcesAtlas()) {
                     DownloadUtils.downloadAndDecryptFileFromResourceUrl(s + ".png", true, "maview");
                     DownloadUtils.downloadAndDecryptFileFromResourceUrl(s + ".plist", true, "maview");
-                    be.suyo.toastoolkit.plistatlasconvert.Main
-                            .main(new String[]{"maview/" + s + ".plist", "maview/" + s + ".json"});
+                    be.suyo.toastoolkit.plistatlasconvert.Main.main(
+                            new String[]{"maview/" + s + ".plist", "maview/" + s + ".json"});
+                }
+
+                for (String s : ccbi.getResourcesTexture()) {
+                    DownloadUtils.downloadAndDecryptFileFromResourceUrl(s, true, "maview");
                 }
 
                 for (String s : ccbi.getResourcesAudioSFX()) {
-                    DownloadUtils
-                            .downloadAndDecryptFileFromResourceUrl("sound/se/battle/" + s + ".ogg", true, "maview");
+                    DownloadUtils.downloadAndDecryptFileFromResourceUrl("sound/se/battle/" + s + ".ogg", true,
+                            "maview");
                 }
 
                 for (String s : ccbi.getResourcesAudioVoice()) {
