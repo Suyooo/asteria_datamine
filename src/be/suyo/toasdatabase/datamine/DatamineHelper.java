@@ -49,11 +49,12 @@ public class DatamineHelper {
 
         while (true) {
             try {
-                String ccbiFileName = "cocos_builder/ccb/evolve_spskill_cutin/ev" + maCheckId;
+                String maCheckIdStr = String.format("%03d", maCheckId);
+                String ccbiFileName = "cocos_builder/ccb/evolve_spskill_cutin/ev" + maCheckIdStr;
                 DownloadUtils.downloadAndDecryptFileFromResourceUrl(ccbiFileName + ".ccbi", true, "maview");
                 CcbiFile ccbi = new CcbiFile("maview/" + ccbiFileName + ".ccbi");
 
-                ccbi.saveAsMAA("maview/ev" + maCheckId + ".js");
+                ccbi.saveAsMAA("maview/ev" + maCheckIdStr + ".js");
 
                 for (String s : ccbi.getResourcesAtlas()) {
                     DownloadUtils.downloadAndDecryptFileFromResourceUrl(s + ".png", true, "maview");
